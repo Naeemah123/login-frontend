@@ -1,0 +1,26 @@
+.sample-app-content {
+  width: 300px;
+  margin: 100px auto;
+  padding: 25px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+h1 {
+  text-align: center;
+}
+
+p {
+  margin: 15px 0;
+}
+
+input {
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+}
+
+button {
+  width: 100%;
+  padding: 8px;
+}
