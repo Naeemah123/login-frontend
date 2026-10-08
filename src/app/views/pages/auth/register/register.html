@@ -1,0 +1,43 @@
+<section class="sample-app-content">
+  <h1>Register:</h1>
+
+  @if (errorMessage) {
+    <p>{{ errorMessage }}</p>
+  }
+
+  @if (successMessage) {
+    <p>{{ successMessage }}</p>
+  }
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <p>
+      <label>Email:</label>
+      <input type="text" formControlName="email">
+
+      @if (isControlHasError('email', 'required')) {
+        <span>Email is required.</span>
+      }
+
+      @if (isControlHasError('email', 'email')) {
+        <span>Enter a valid email.</span>
+      }
+    </p>
+
+    <p>
+      <label>Password:</label>
+      <input type="password" formControlName="password">
+
+      @if (isControlHasError('password', 'required')) {
+        <span>Password is required.</span>
+      }
+    </p>
+
+    <p>
+      <button type="submit" [disabled]="!form.valid">Register</button>
+    </p>
+  </form>
+  <p>
+    Already have an account?
+    <a routerLink="/login">Login</a>
+  </p>
+</section>
