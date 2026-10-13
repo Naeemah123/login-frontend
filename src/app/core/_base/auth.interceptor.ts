@@ -1,13 +1,14 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 import { catchError, switchMap, throwError } from 'rxjs';
-import { environment } from '../../../environments/environment';
+import { AuthService } from '../auth/_services/auth.service';
 import { apiUrl } from '../_config/api.config';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
-  const http = inject(HttpClient);
-  const token = localStorage.getItem('token');
+  const auth = inject(AuthService);
+  const router = inject(Router);
+  const token = auth.getAccessToken();
 
   if (token) {
     req = req.clone({
@@ -21,20 +22,17 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
         return throwError(() => error);
       }
 
-      const refreshToken = localStorage.getItem('refreshToken');
+      // Single-flight: AuthService shares one refresh call at a time.
+      const refresh$ = auth.refreshOnce();
 
-      if (!refreshToken) {
-        localStorage.removeItem('token');
+      if (!refresh$) {
+        auth.clearSession();
+        router.navigate(['/login']);
         return throwError(() => error);
       }
 
-      return http.post<any>(
-        `${environment.apiUrl}${apiUrl.refresh}`,
-        { refreshToken }
-      ).pipe(
+      return refresh$.pipe(
         switchMap((response) => {
-          localStorage.setItem('token', response.data.accessToken);
-
           const retryReq = req.clone({
             setHeaders: {
               Authorization: `Bearer ${response.data.accessToken}`
@@ -44,8 +42,8 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
           return next(retryReq);
         }),
         catchError((refreshError) => {
-          localStorage.removeItem('token');
-          localStorage.removeItem('refreshToken');
+          auth.clearSession();
+          router.navigate(['/login']);
           return throwError(() => refreshError);
         })
       );

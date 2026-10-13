@@ -1,12 +1,12 @@
 import { Routes } from '@angular/router';
-import { Login } from './views/pages/auth/login/login';
-import { Dashboard } from './views/pages/dashboard/dashboard';
+import { LoginComponent } from './views/pages/auth/LoginComponent/login.component';
+import { DashboardComponent } from './views/pages/DashboardComponent/dashboard.component';
 import { authGuard } from './core/auth/_guards/auth-guard';
-import { Register } from './views/pages/auth/register/register';
+import { RegisterComponent } from './views/pages/auth/RegisterComponent/register.component';
 
 export const routes: Routes = [
-  { path: '', component: Login },
-  { path: 'login', component: Login },
-  { path: 'register', component: Register },
-  { path: 'dashboard', component: Dashboard, canActivate: [authGuard] }
+  { path: '', component: LoginComponent },
+  { path: 'login', component: LoginComponent },
+  { path: 'register', component: RegisterComponent },
+  { path: 'dashboard', component: DashboardComponent, canActivate: [authGuard] }
 ];

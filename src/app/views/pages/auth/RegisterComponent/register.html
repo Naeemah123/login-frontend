@@ -1,5 +1,6 @@
 <section class="sample-app-content">
   <h1>Register:</h1>
+  <app-toast></app-toast>
 
   @if (errorMessage) {
     <p>{{ errorMessage }}</p>
@@ -29,6 +30,10 @@
 
       @if (isControlHasError('password', 'required')) {
         <span>Password is required.</span>
+      }
+
+      @if (isControlHasError('password', 'minlength')) {
+        <span>Password must be at least 6 characters.</span>
       }
     </p>
 
