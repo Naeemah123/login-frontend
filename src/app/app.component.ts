@@ -5,8 +5,8 @@ import { ToastComponent } from './core/_base/toast.component';
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet, ToastComponent],
-  templateUrl: './app.html',
-  styleUrl: './app.css'
+  templateUrl: './app.component.html',
+  styleUrl: './app.component.css'
 })
 export class AppComponent {
   protected readonly title = signal('login-frontend');

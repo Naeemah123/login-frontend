@@ -3,12 +3,7 @@ import { CanActivateFn, Router } from '@angular/router';
 import { catchError, map, of } from 'rxjs';
 import { AuthService } from '../_services/auth.service';
 
-/**
- * Guard based on AuthService state.
- * - Valid access token -> allow.
- * - Expired access token but refresh token exists -> try one refresh first.
- * - No session / refresh fails -> redirect to /login.
- */
+
 export const authGuard: CanActivateFn = () => {
   const auth = inject(AuthService);
   const router = inject(Router);

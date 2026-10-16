@@ -3,7 +3,7 @@ export interface ApiResponse<T> {
     status: string;
     message: string;
     code: number;
-    errors: string[];
+    errors: string[] | Record<string, string[]>;
   };
   data: T;
 }

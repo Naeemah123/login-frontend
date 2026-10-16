@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable, shareReplay, tap } from 'rxjs';
@@ -7,35 +7,31 @@ import { apiUrl } from '../../_config/api.config';
 import { ApiResponse } from '../_models/auth-response.model';
 import { LoginData, DashboardData } from '../_models/auth.model';
 
-const ACCESS_KEY = 'token';
-const REFRESH_KEY = 'refreshToken';
-
 @Injectable({ providedIn: 'root' })
 export class AuthService {
+  private readonly http = inject(HttpClient);
+  private readonly router = inject(Router);
   private api = environment.apiUrl;
   private refreshInFlight$: Observable<ApiResponse<LoginData>> | null = null;
 
-  constructor(private http: HttpClient, private router: Router) {}
-
-  // ---- session storage: only AuthService touches localStorage ----
   setSession(accessToken: string, refreshToken: string): void {
-    localStorage.setItem(ACCESS_KEY, accessToken);
-    localStorage.setItem(REFRESH_KEY, refreshToken);
-  }
+  localStorage.setItem(environment.storageKeys.accessToken, accessToken);
+  localStorage.setItem(environment.storageKeys.refreshToken, refreshToken);
+}
 
-  clearSession(): void {
-    localStorage.removeItem(ACCESS_KEY);
-    localStorage.removeItem(REFRESH_KEY);
-    this.refreshInFlight$ = null;
-  }
+clearSession(): void {
+  localStorage.removeItem(environment.storageKeys.accessToken);
+  localStorage.removeItem(environment.storageKeys.refreshToken);
+  this.refreshInFlight$ = null;
+}
 
-  getAccessToken(): string | null {
-    return localStorage.getItem(ACCESS_KEY);
-  }
+getAccessToken(): string | null {
+  return localStorage.getItem(environment.storageKeys.accessToken);
+}
 
-  getRefreshToken(): string | null {
-    return localStorage.getItem(REFRESH_KEY);
-  }
+getRefreshToken(): string | null {
+  return localStorage.getItem(environment.storageKeys.refreshToken);
+}
 
   isLoggedIn(): boolean {
     return !!this.getAccessToken() || !!this.getRefreshToken();

@@ -1,6 +1,5 @@
 <section class="sample-app-content">
   <h1>Register:</h1>
-  <app-toast></app-toast>
 
   @if (errorMessage) {
     <p>{{ errorMessage }}</p>
@@ -38,9 +37,12 @@
     </p>
 
     <p>
-      <button type="submit" [disabled]="!form.valid">Register</button>
+      <button type="submit" [disabled]="isSubmitting">
+        {{ isSubmitting ? 'Registering...' : 'Register' }}
+      </button>
     </p>
   </form>
+
   <p>
     Already have an account?
     <a routerLink="/login">Login</a>
